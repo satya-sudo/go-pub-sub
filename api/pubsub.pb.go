@@ -23,7 +23,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// Publish message request
 type PublishRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Topic         string                 `protobuf:"bytes,1,opt,name=topic,proto3" json:"topic,omitempty"`
@@ -100,7 +99,6 @@ func (x *PublishRequest) GetPartition() int32 {
 	return 0
 }
 
-// Broker's response to publish
 type PublishResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Topic         string                 `protobuf:"bytes,1,opt,name=topic,proto3" json:"topic,omitempty"`
@@ -169,7 +167,6 @@ func (x *PublishResponse) GetTimestamp() *timestamppb.Timestamp {
 	return nil
 }
 
-// Subscribe request from a consumer
 type SubscribeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Topic         string                 `protobuf:"bytes,1,opt,name=topic,proto3" json:"topic,omitempty"`
@@ -246,7 +243,6 @@ func (x *SubscribeRequest) GetAutoAck() bool {
 	return false
 }
 
-// Message structure sent to consumers
 type Message struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Topic         string                 `protobuf:"bytes,1,opt,name=topic,proto3" json:"topic,omitempty"`
@@ -339,7 +335,6 @@ func (x *Message) GetTimestamp() *timestamppb.Timestamp {
 	return nil
 }
 
-// Ack request from consumers
 type AckRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Topic         string                 `protobuf:"bytes,1,opt,name=topic,proto3" json:"topic,omitempty"`
@@ -408,6 +403,370 @@ func (x *AckRequest) GetGroup() string {
 	return ""
 }
 
+type CreateTopicRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Topic         string                 `protobuf:"bytes,1,opt,name=topic,proto3" json:"topic,omitempty"`
+	Partitions    int32                  `protobuf:"varint,2,opt,name=partitions,proto3" json:"partitions,omitempty"`                      // number of partitions
+	RetentionMs   int64                  `protobuf:"varint,3,opt,name=retention_ms,json=retentionMs,proto3" json:"retention_ms,omitempty"` // retention in milliseconds
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateTopicRequest) Reset() {
+	*x = CreateTopicRequest{}
+	mi := &file_api_pubsub_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateTopicRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateTopicRequest) ProtoMessage() {}
+
+func (x *CreateTopicRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_pubsub_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateTopicRequest.ProtoReflect.Descriptor instead.
+func (*CreateTopicRequest) Descriptor() ([]byte, []int) {
+	return file_api_pubsub_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *CreateTopicRequest) GetTopic() string {
+	if x != nil {
+		return x.Topic
+	}
+	return ""
+}
+
+func (x *CreateTopicRequest) GetPartitions() int32 {
+	if x != nil {
+		return x.Partitions
+	}
+	return 0
+}
+
+func (x *CreateTopicRequest) GetRetentionMs() int64 {
+	if x != nil {
+		return x.RetentionMs
+	}
+	return 0
+}
+
+type CreateTopicResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Ok            bool                   `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
+	Reason        string                 `protobuf:"bytes,2,opt,name=reason,proto3" json:"reason,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateTopicResponse) Reset() {
+	*x = CreateTopicResponse{}
+	mi := &file_api_pubsub_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateTopicResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateTopicResponse) ProtoMessage() {}
+
+func (x *CreateTopicResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_pubsub_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateTopicResponse.ProtoReflect.Descriptor instead.
+func (*CreateTopicResponse) Descriptor() ([]byte, []int) {
+	return file_api_pubsub_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *CreateTopicResponse) GetOk() bool {
+	if x != nil {
+		return x.Ok
+	}
+	return false
+}
+
+func (x *CreateTopicResponse) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+type TopicInfoRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Topic         string                 `protobuf:"bytes,1,opt,name=topic,proto3" json:"topic,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TopicInfoRequest) Reset() {
+	*x = TopicInfoRequest{}
+	mi := &file_api_pubsub_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TopicInfoRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TopicInfoRequest) ProtoMessage() {}
+
+func (x *TopicInfoRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_pubsub_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TopicInfoRequest.ProtoReflect.Descriptor instead.
+func (*TopicInfoRequest) Descriptor() ([]byte, []int) {
+	return file_api_pubsub_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *TopicInfoRequest) GetTopic() string {
+	if x != nil {
+		return x.Topic
+	}
+	return ""
+}
+
+type TopicInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Topic         string                 `protobuf:"bytes,1,opt,name=topic,proto3" json:"topic,omitempty"`
+	Partitions    int32                  `protobuf:"varint,2,opt,name=partitions,proto3" json:"partitions,omitempty"`
+	RetentionMs   int64                  `protobuf:"varint,3,opt,name=retention_ms,json=retentionMs,proto3" json:"retention_ms,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TopicInfo) Reset() {
+	*x = TopicInfo{}
+	mi := &file_api_pubsub_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TopicInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TopicInfo) ProtoMessage() {}
+
+func (x *TopicInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_api_pubsub_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TopicInfo.ProtoReflect.Descriptor instead.
+func (*TopicInfo) Descriptor() ([]byte, []int) {
+	return file_api_pubsub_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *TopicInfo) GetTopic() string {
+	if x != nil {
+		return x.Topic
+	}
+	return ""
+}
+
+func (x *TopicInfo) GetPartitions() int32 {
+	if x != nil {
+		return x.Partitions
+	}
+	return 0
+}
+
+func (x *TopicInfo) GetRetentionMs() int64 {
+	if x != nil {
+		return x.RetentionMs
+	}
+	return 0
+}
+
+func (x *TopicInfo) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+type TopicInfoResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Info          *TopicInfo             `protobuf:"bytes,1,opt,name=info,proto3" json:"info,omitempty"`
+	Found         bool                   `protobuf:"varint,2,opt,name=found,proto3" json:"found,omitempty"`
+	Reason        string                 `protobuf:"bytes,3,opt,name=reason,proto3" json:"reason,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TopicInfoResponse) Reset() {
+	*x = TopicInfoResponse{}
+	mi := &file_api_pubsub_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TopicInfoResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TopicInfoResponse) ProtoMessage() {}
+
+func (x *TopicInfoResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_pubsub_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TopicInfoResponse.ProtoReflect.Descriptor instead.
+func (*TopicInfoResponse) Descriptor() ([]byte, []int) {
+	return file_api_pubsub_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *TopicInfoResponse) GetInfo() *TopicInfo {
+	if x != nil {
+		return x.Info
+	}
+	return nil
+}
+
+func (x *TopicInfoResponse) GetFound() bool {
+	if x != nil {
+		return x.Found
+	}
+	return false
+}
+
+func (x *TopicInfoResponse) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+type ListTopicsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListTopicsRequest) Reset() {
+	*x = ListTopicsRequest{}
+	mi := &file_api_pubsub_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListTopicsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListTopicsRequest) ProtoMessage() {}
+
+func (x *ListTopicsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_pubsub_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListTopicsRequest.ProtoReflect.Descriptor instead.
+func (*ListTopicsRequest) Descriptor() ([]byte, []int) {
+	return file_api_pubsub_proto_rawDescGZIP(), []int{10}
+}
+
+type ListTopicsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Topics        []*TopicInfo           `protobuf:"bytes,1,rep,name=topics,proto3" json:"topics,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListTopicsResponse) Reset() {
+	*x = ListTopicsResponse{}
+	mi := &file_api_pubsub_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListTopicsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListTopicsResponse) ProtoMessage() {}
+
+func (x *ListTopicsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_pubsub_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListTopicsResponse.ProtoReflect.Descriptor instead.
+func (*ListTopicsResponse) Descriptor() ([]byte, []int) {
+	return file_api_pubsub_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *ListTopicsResponse) GetTopics() []*TopicInfo {
+	if x != nil {
+		return x.Topics
+	}
+	return nil
+}
+
 var File_api_pubsub_proto protoreflect.FileDescriptor
 
 const file_api_pubsub_proto_rawDesc = "" +
@@ -449,11 +808,41 @@ const file_api_pubsub_proto_rawDesc = "" +
 	"\x05topic\x18\x01 \x01(\tR\x05topic\x12\x1c\n" +
 	"\tpartition\x18\x02 \x01(\x05R\tpartition\x12\x16\n" +
 	"\x06offset\x18\x03 \x01(\x03R\x06offset\x12\x14\n" +
-	"\x05group\x18\x04 \x01(\tR\x05group2\xb1\x01\n" +
+	"\x05group\x18\x04 \x01(\tR\x05group\"m\n" +
+	"\x12CreateTopicRequest\x12\x14\n" +
+	"\x05topic\x18\x01 \x01(\tR\x05topic\x12\x1e\n" +
+	"\n" +
+	"partitions\x18\x02 \x01(\x05R\n" +
+	"partitions\x12!\n" +
+	"\fretention_ms\x18\x03 \x01(\x03R\vretentionMs\"=\n" +
+	"\x13CreateTopicResponse\x12\x0e\n" +
+	"\x02ok\x18\x01 \x01(\bR\x02ok\x12\x16\n" +
+	"\x06reason\x18\x02 \x01(\tR\x06reason\"(\n" +
+	"\x10TopicInfoRequest\x12\x14\n" +
+	"\x05topic\x18\x01 \x01(\tR\x05topic\"\x9f\x01\n" +
+	"\tTopicInfo\x12\x14\n" +
+	"\x05topic\x18\x01 \x01(\tR\x05topic\x12\x1e\n" +
+	"\n" +
+	"partitions\x18\x02 \x01(\x05R\n" +
+	"partitions\x12!\n" +
+	"\fretention_ms\x18\x03 \x01(\x03R\vretentionMs\x129\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"h\n" +
+	"\x11TopicInfoResponse\x12%\n" +
+	"\x04info\x18\x01 \x01(\v2\x11.pubsub.TopicInfoR\x04info\x12\x14\n" +
+	"\x05found\x18\x02 \x01(\bR\x05found\x12\x16\n" +
+	"\x06reason\x18\x03 \x01(\tR\x06reason\"\x13\n" +
+	"\x11ListTopicsRequest\"?\n" +
+	"\x12ListTopicsResponse\x12)\n" +
+	"\x06topics\x18\x01 \x03(\v2\x11.pubsub.TopicInfoR\x06topics2\x83\x03\n" +
 	"\x06PubSub\x12:\n" +
 	"\aPublish\x12\x16.pubsub.PublishRequest\x1a\x17.pubsub.PublishResponse\x128\n" +
 	"\tSubscribe\x12\x18.pubsub.SubscribeRequest\x1a\x0f.pubsub.Message0\x01\x121\n" +
-	"\x03Ack\x12\x12.pubsub.AckRequest\x1a\x16.google.protobuf.EmptyB*Z(github.com/satya-sudo/go-pub-sub/api;apib\x06proto3"
+	"\x03Ack\x12\x12.pubsub.AckRequest\x1a\x16.google.protobuf.Empty\x12F\n" +
+	"\vCreateTopic\x12\x1a.pubsub.CreateTopicRequest\x1a\x1b.pubsub.CreateTopicResponse\x12C\n" +
+	"\fGetTopicInfo\x12\x18.pubsub.TopicInfoRequest\x1a\x19.pubsub.TopicInfoResponse\x12C\n" +
+	"\n" +
+	"ListTopics\x12\x19.pubsub.ListTopicsRequest\x1a\x1a.pubsub.ListTopicsResponseB*Z(github.com/satya-sudo/go-pub-sub/api;apib\x06proto3"
 
 var (
 	file_api_pubsub_proto_rawDescOnce sync.Once
@@ -467,34 +856,50 @@ func file_api_pubsub_proto_rawDescGZIP() []byte {
 	return file_api_pubsub_proto_rawDescData
 }
 
-var file_api_pubsub_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_api_pubsub_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_api_pubsub_proto_goTypes = []any{
 	(*PublishRequest)(nil),        // 0: pubsub.PublishRequest
 	(*PublishResponse)(nil),       // 1: pubsub.PublishResponse
 	(*SubscribeRequest)(nil),      // 2: pubsub.SubscribeRequest
 	(*Message)(nil),               // 3: pubsub.Message
 	(*AckRequest)(nil),            // 4: pubsub.AckRequest
-	nil,                           // 5: pubsub.PublishRequest.HeadersEntry
-	nil,                           // 6: pubsub.Message.HeadersEntry
-	(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
-	(*emptypb.Empty)(nil),         // 8: google.protobuf.Empty
+	(*CreateTopicRequest)(nil),    // 5: pubsub.CreateTopicRequest
+	(*CreateTopicResponse)(nil),   // 6: pubsub.CreateTopicResponse
+	(*TopicInfoRequest)(nil),      // 7: pubsub.TopicInfoRequest
+	(*TopicInfo)(nil),             // 8: pubsub.TopicInfo
+	(*TopicInfoResponse)(nil),     // 9: pubsub.TopicInfoResponse
+	(*ListTopicsRequest)(nil),     // 10: pubsub.ListTopicsRequest
+	(*ListTopicsResponse)(nil),    // 11: pubsub.ListTopicsResponse
+	nil,                           // 12: pubsub.PublishRequest.HeadersEntry
+	nil,                           // 13: pubsub.Message.HeadersEntry
+	(*timestamppb.Timestamp)(nil), // 14: google.protobuf.Timestamp
+	(*emptypb.Empty)(nil),         // 15: google.protobuf.Empty
 }
 var file_api_pubsub_proto_depIdxs = []int32{
-	5, // 0: pubsub.PublishRequest.headers:type_name -> pubsub.PublishRequest.HeadersEntry
-	7, // 1: pubsub.PublishResponse.timestamp:type_name -> google.protobuf.Timestamp
-	6, // 2: pubsub.Message.headers:type_name -> pubsub.Message.HeadersEntry
-	7, // 3: pubsub.Message.timestamp:type_name -> google.protobuf.Timestamp
-	0, // 4: pubsub.PubSub.Publish:input_type -> pubsub.PublishRequest
-	2, // 5: pubsub.PubSub.Subscribe:input_type -> pubsub.SubscribeRequest
-	4, // 6: pubsub.PubSub.Ack:input_type -> pubsub.AckRequest
-	1, // 7: pubsub.PubSub.Publish:output_type -> pubsub.PublishResponse
-	3, // 8: pubsub.PubSub.Subscribe:output_type -> pubsub.Message
-	8, // 9: pubsub.PubSub.Ack:output_type -> google.protobuf.Empty
-	7, // [7:10] is the sub-list for method output_type
-	4, // [4:7] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	12, // 0: pubsub.PublishRequest.headers:type_name -> pubsub.PublishRequest.HeadersEntry
+	14, // 1: pubsub.PublishResponse.timestamp:type_name -> google.protobuf.Timestamp
+	13, // 2: pubsub.Message.headers:type_name -> pubsub.Message.HeadersEntry
+	14, // 3: pubsub.Message.timestamp:type_name -> google.protobuf.Timestamp
+	14, // 4: pubsub.TopicInfo.created_at:type_name -> google.protobuf.Timestamp
+	8,  // 5: pubsub.TopicInfoResponse.info:type_name -> pubsub.TopicInfo
+	8,  // 6: pubsub.ListTopicsResponse.topics:type_name -> pubsub.TopicInfo
+	0,  // 7: pubsub.PubSub.Publish:input_type -> pubsub.PublishRequest
+	2,  // 8: pubsub.PubSub.Subscribe:input_type -> pubsub.SubscribeRequest
+	4,  // 9: pubsub.PubSub.Ack:input_type -> pubsub.AckRequest
+	5,  // 10: pubsub.PubSub.CreateTopic:input_type -> pubsub.CreateTopicRequest
+	7,  // 11: pubsub.PubSub.GetTopicInfo:input_type -> pubsub.TopicInfoRequest
+	10, // 12: pubsub.PubSub.ListTopics:input_type -> pubsub.ListTopicsRequest
+	1,  // 13: pubsub.PubSub.Publish:output_type -> pubsub.PublishResponse
+	3,  // 14: pubsub.PubSub.Subscribe:output_type -> pubsub.Message
+	15, // 15: pubsub.PubSub.Ack:output_type -> google.protobuf.Empty
+	6,  // 16: pubsub.PubSub.CreateTopic:output_type -> pubsub.CreateTopicResponse
+	9,  // 17: pubsub.PubSub.GetTopicInfo:output_type -> pubsub.TopicInfoResponse
+	11, // 18: pubsub.PubSub.ListTopics:output_type -> pubsub.ListTopicsResponse
+	13, // [13:19] is the sub-list for method output_type
+	7,  // [7:13] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_api_pubsub_proto_init() }
@@ -508,7 +913,7 @@ func file_api_pubsub_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_pubsub_proto_rawDesc), len(file_api_pubsub_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

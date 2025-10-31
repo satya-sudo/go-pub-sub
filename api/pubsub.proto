@@ -8,7 +8,6 @@ import "google/protobuf/empty.proto";
 
 // === Core Messages ===
 
-// Publish message request
 message PublishRequest {
   string topic = 1;
   bytes key = 2;
@@ -17,7 +16,6 @@ message PublishRequest {
   int32 partition = 5; // -1 = auto
 }
 
-// Broker's response to publish
 message PublishResponse {
   string topic = 1;
   int32 partition = 2;
@@ -25,7 +23,6 @@ message PublishResponse {
   google.protobuf.Timestamp timestamp = 4;
 }
 
-// Subscribe request from a consumer
 message SubscribeRequest {
   string topic = 1;
   string group = 2;
@@ -34,7 +31,6 @@ message SubscribeRequest {
   bool auto_ack = 5;
 }
 
-// Message structure sent to consumers
 message Message {
   string topic = 1;
   int32 partition = 2;
@@ -45,7 +41,6 @@ message Message {
   google.protobuf.Timestamp timestamp = 7;
 }
 
-// Ack request from consumers
 message AckRequest {
   string topic = 1;
   int32 partition = 2;
@@ -53,10 +48,52 @@ message AckRequest {
   string group = 4;
 }
 
+// === Admin Messages ===
+
+message CreateTopicRequest {
+  string topic = 1;
+  int32 partitions = 2;    // number of partitions
+  int64 retention_ms = 3;  // retention in milliseconds
+}
+
+message CreateTopicResponse {
+  bool ok = 1;
+  string reason = 2;
+}
+
+message TopicInfoRequest {
+  string topic = 1;
+}
+
+message TopicInfo {
+  string topic = 1;
+  int32 partitions = 2;
+  int64 retention_ms = 3;
+  google.protobuf.Timestamp created_at = 4;
+}
+
+message TopicInfoResponse {
+  TopicInfo info = 1;
+  bool found = 2;
+  string reason = 3;
+}
+
+message ListTopicsRequest {}
+
+message ListTopicsResponse {
+  repeated TopicInfo topics = 1;
+}
+
 // === Service Definition ===
 
 service PubSub {
+  // producer/consumer APIs
   rpc Publish(PublishRequest) returns (PublishResponse);
   rpc Subscribe(SubscribeRequest) returns (stream Message);
   rpc Ack(AckRequest) returns (google.protobuf.Empty);
+
+  // admin APIs
+  rpc CreateTopic(CreateTopicRequest) returns (CreateTopicResponse);
+  rpc GetTopicInfo(TopicInfoRequest) returns (TopicInfoResponse);
+  rpc ListTopics(ListTopicsRequest) returns (ListTopicsResponse);
 }

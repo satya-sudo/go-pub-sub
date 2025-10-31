@@ -20,18 +20,26 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	PubSub_Publish_FullMethodName   = "/pubsub.PubSub/Publish"
-	PubSub_Subscribe_FullMethodName = "/pubsub.PubSub/Subscribe"
-	PubSub_Ack_FullMethodName       = "/pubsub.PubSub/Ack"
+	PubSub_Publish_FullMethodName      = "/pubsub.PubSub/Publish"
+	PubSub_Subscribe_FullMethodName    = "/pubsub.PubSub/Subscribe"
+	PubSub_Ack_FullMethodName          = "/pubsub.PubSub/Ack"
+	PubSub_CreateTopic_FullMethodName  = "/pubsub.PubSub/CreateTopic"
+	PubSub_GetTopicInfo_FullMethodName = "/pubsub.PubSub/GetTopicInfo"
+	PubSub_ListTopics_FullMethodName   = "/pubsub.PubSub/ListTopics"
 )
 
 // PubSubClient is the client API for PubSub service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PubSubClient interface {
+	// producer/consumer APIs
 	Publish(ctx context.Context, in *PublishRequest, opts ...grpc.CallOption) (*PublishResponse, error)
 	Subscribe(ctx context.Context, in *SubscribeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Message], error)
 	Ack(ctx context.Context, in *AckRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// admin APIs
+	CreateTopic(ctx context.Context, in *CreateTopicRequest, opts ...grpc.CallOption) (*CreateTopicResponse, error)
+	GetTopicInfo(ctx context.Context, in *TopicInfoRequest, opts ...grpc.CallOption) (*TopicInfoResponse, error)
+	ListTopics(ctx context.Context, in *ListTopicsRequest, opts ...grpc.CallOption) (*ListTopicsResponse, error)
 }
 
 type pubSubClient struct {
@@ -81,13 +89,48 @@ func (c *pubSubClient) Ack(ctx context.Context, in *AckRequest, opts ...grpc.Cal
 	return out, nil
 }
 
+func (c *pubSubClient) CreateTopic(ctx context.Context, in *CreateTopicRequest, opts ...grpc.CallOption) (*CreateTopicResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateTopicResponse)
+	err := c.cc.Invoke(ctx, PubSub_CreateTopic_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *pubSubClient) GetTopicInfo(ctx context.Context, in *TopicInfoRequest, opts ...grpc.CallOption) (*TopicInfoResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(TopicInfoResponse)
+	err := c.cc.Invoke(ctx, PubSub_GetTopicInfo_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *pubSubClient) ListTopics(ctx context.Context, in *ListTopicsRequest, opts ...grpc.CallOption) (*ListTopicsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListTopicsResponse)
+	err := c.cc.Invoke(ctx, PubSub_ListTopics_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PubSubServer is the server API for PubSub service.
 // All implementations must embed UnimplementedPubSubServer
 // for forward compatibility.
 type PubSubServer interface {
+	// producer/consumer APIs
 	Publish(context.Context, *PublishRequest) (*PublishResponse, error)
 	Subscribe(*SubscribeRequest, grpc.ServerStreamingServer[Message]) error
 	Ack(context.Context, *AckRequest) (*emptypb.Empty, error)
+	// admin APIs
+	CreateTopic(context.Context, *CreateTopicRequest) (*CreateTopicResponse, error)
+	GetTopicInfo(context.Context, *TopicInfoRequest) (*TopicInfoResponse, error)
+	ListTopics(context.Context, *ListTopicsRequest) (*ListTopicsResponse, error)
 	mustEmbedUnimplementedPubSubServer()
 }
 
@@ -106,6 +149,15 @@ func (UnimplementedPubSubServer) Subscribe(*SubscribeRequest, grpc.ServerStreami
 }
 func (UnimplementedPubSubServer) Ack(context.Context, *AckRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ack not implemented")
+}
+func (UnimplementedPubSubServer) CreateTopic(context.Context, *CreateTopicRequest) (*CreateTopicResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTopic not implemented")
+}
+func (UnimplementedPubSubServer) GetTopicInfo(context.Context, *TopicInfoRequest) (*TopicInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTopicInfo not implemented")
+}
+func (UnimplementedPubSubServer) ListTopics(context.Context, *ListTopicsRequest) (*ListTopicsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListTopics not implemented")
 }
 func (UnimplementedPubSubServer) mustEmbedUnimplementedPubSubServer() {}
 func (UnimplementedPubSubServer) testEmbeddedByValue()                {}
@@ -175,6 +227,60 @@ func _PubSub_Ack_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PubSub_CreateTopic_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTopicRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PubSubServer).CreateTopic(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PubSub_CreateTopic_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PubSubServer).CreateTopic(ctx, req.(*CreateTopicRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PubSub_GetTopicInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TopicInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PubSubServer).GetTopicInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PubSub_GetTopicInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PubSubServer).GetTopicInfo(ctx, req.(*TopicInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PubSub_ListTopics_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListTopicsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PubSubServer).ListTopics(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PubSub_ListTopics_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PubSubServer).ListTopics(ctx, req.(*ListTopicsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PubSub_ServiceDesc is the grpc.ServiceDesc for PubSub service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -189,6 +295,18 @@ var PubSub_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Ack",
 			Handler:    _PubSub_Ack_Handler,
+		},
+		{
+			MethodName: "CreateTopic",
+			Handler:    _PubSub_CreateTopic_Handler,
+		},
+		{
+			MethodName: "GetTopicInfo",
+			Handler:    _PubSub_GetTopicInfo_Handler,
+		},
+		{
+			MethodName: "ListTopics",
+			Handler:    _PubSub_ListTopics_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

@@ -14,11 +14,11 @@ type InMemoryStore struct {
 	closed  bool
 }
 
-func NewInMemoryStore() *InMemoryStore {
+func NewInMemoryStore() (*InMemoryStore, error) {
 	return &InMemoryStore{
 		logs:    make(map[string][]*Message),
 		commits: make(map[string]int64),
-	}
+	}, nil
 }
 
 func tkey(topic string, partition int) string {
