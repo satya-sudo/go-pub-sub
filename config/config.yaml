@@ -1,0 +1,85 @@
+#####################################################################
+# go-pub-sub Broker Configuration
+# -------------------------------------------------------------------
+# This file defines the runtime configuration for the gRPC-based
+# pub/sub broker. Only YAML is used — no environment variables
+# or command-line flags are required.
+#####################################################################
+
+# ================================================================
+# 🌐 Server Settings
+# ================================================================
+
+# The TCP port where the gRPC broker will listen.
+# Default: 50051
+port: 50051
+
+
+# ================================================================
+# 🗃️ Storage Backend
+# ================================================================
+# Select which storage engine to use for message logs and offsets.
+# Supported types:
+#   - memory   : In-memory (fast, ephemeral, for dev/testing)
+#   - redis    : Uses Redis for message queue and commit offsets
+#   - postgres : Durable SQL store for messages and offsets
+#   - file     : (future) Local file-based WAL
+# ----------------------------------------------------------------
+store:
+  # Type of backend to use
+  type: memory
+
+  # Path for persistent data (only used for file-based backend)
+  data_dir: ./data
+
+  # ------------------------------------------------------------
+  # Redis configuration (only used if type = "redis")
+  # ------------------------------------------------------------
+  redis:
+    # Redis server address (host:port)
+    addr: localhost:6379
+
+    # Redis authentication password (empty if not needed)
+    pass: ""
+
+    # Database index number
+    db: 0
+
+  # ------------------------------------------------------------
+  # Postgres configuration (only used if type = "postgres")
+  # ------------------------------------------------------------
+  postgres:
+    # Full DSN for connecting to PostgreSQL
+    # Format: postgres://user:pass@host:port/dbname?sslmode=disable
+    dsn: "postgres://user:pass@localhost:5432/gopub?sslmode=disable"
+
+
+# ================================================================
+# 🧩 Broker Defaults
+# ================================================================
+
+# Default topic name that will be auto-created at startup.
+# All producers/consumers can use this immediately.
+default_topic: events
+
+# Retention period for messages in milliseconds.
+# (e.g., 86400000 = 24 hours)
+retention_ms: 86400000
+
+
+# ================================================================
+# 📦 Misc / Paths
+# ================================================================
+# Directory where broker can write transient data, snapshots, etc.
+# (not used by memory store)
+data_dir: ./data
+
+
+#####################################################################
+# 🧠 Notes
+# -------------------------------------------------------------------
+# - Keep type=memory for local testing.
+# - For Redis/Postgres, make sure the service is reachable before
+#   starting the broker.
+# - This file is read once at startup; changing it requires restart.
+#####################################################################

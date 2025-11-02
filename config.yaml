@@ -1,0 +1,26 @@
+# gRPC server port
+port: 50051
+
+# Storage backend type
+# Supported values: memory | redis | postgres | file
+store:
+  type: memory
+
+# Data directory (used for file store, safe to leave default)
+data_dir: ./data
+
+# Default topic created on startup
+default_topic: events
+
+# Retention period for messages (in milliseconds)
+retention_ms: 86400000  # 1 day
+
+# Redis configuration (only used if store.type = redis)
+redis:
+  addr: localhost:6379
+  pass: ""
+  db: 0
+
+# Postgres configuration (only used if store.type = postgres)
+postgres:
+  dsn: "postgres://user:pass@localhost:5432/gopub?sslmode=disable"

@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	cfg := config.MustLoad()
+	cfg := config.LoadConfig()
 	br := config.InitBroker(cfg)
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.Port))
