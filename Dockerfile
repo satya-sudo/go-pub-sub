@@ -1,32 +1,35 @@
-# syntax=docker/dockerfile:1
-FROM golang:1.25 AS builder
+# ---------- Builder Stage ----------
+FROM golang:1.25-alpine AS builder
+
+# Install tools and CA certs for module download
+RUN apk add --no-cache git ca-certificates
 
 WORKDIR /src
-RUN apt-get update && apt-get install -y git ca-certificates && rm -rf /var/lib/apt/lists/*
 
-# Copy go module files first for caching
+# Copy go module files first (cache layer)
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy source
+# Copy full project
 COPY . .
 
-# Build server binary
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /bin/go-pub-sub ./cmd/server
+# Build the broker binary
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
+    go build -ldflags="-s -w" -o /app/gopubsub ./cmd/server
 
-# Final slim image
-FROM debian:bookworm-slim
-RUN apt-get update && apt-get install -y ca-certificates tzdata && rm -rf /var/lib/apt/lists/*
+# ---------- Runtime Stage ----------
+FROM alpine:3.20
 
-COPY --from=builder /bin/go-pub-sub /bin/go-pub-sub
+# Security: create non-root user
+RUN addgroup -S app && adduser -S -G app app && apk add --no-cache ca-certificates
 
-ENV BROKER_PORT=50051
-ENV BROKER_STORE=memory
-ENV BROKER_DEFAULT_TOPIC=events
-ENV POSTGRES_DSN=postgres://postgres:postgres@postgres:5432/gopub?sslmode=disable
-ENV REDIS_ADDR=redis:6379
-ENV REDIS_PASS=
+# Copy binary & config
+COPY --from=builder /app/gopubsub /usr/local/bin/gopubsub
+COPY config/config.yaml /etc/gopubsub/config.yaml
 
 EXPOSE 50051
 
-ENTRYPOINT ["/bin/go-pub-sub"]
+USER app
+
+# Default command — uses baked config (override at runtime if needed)
+ENTRYPOINT ["/usr/local/bin/gopubsub", "--config=/etc/gopubsub/config.yaml"]
