@@ -44,7 +44,8 @@ stop-image:
 
 # Run the smoke test.
 smoke-test:
-	@NUM_MSGS=${NUM_MSGS:-50} ./scripts/smoke_test.sh ${NUM_MSGS}
+	@NUM_MSGS=${NUM_MSGS:-50} IMAGE_NAME=${IMAGE_NAME:-go-pub-sub:local} ./scripts/smoke_with_docker.sh ${NUM_MSGS} ${IMAGE_NAME}
+
 
 clean:
 	-docker rmi $(IMAGE_NAME):local $(IMAGE) || true
